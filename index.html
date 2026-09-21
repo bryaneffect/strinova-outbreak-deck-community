@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta
+    name="description"
+    content="Database deck komunitas Strinova Outbreak."
+  />
+
+  <title>Strinova Outbreak Decks</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <header class="topbar">
+
+    <div class="wordmark">
+      <img src="strinova-logo.png" alt="Strinova" class="wordmark-logo" />
+      Outbreak Decks
+      <span class="wordmark-badge">Strinova Community Database</span>
+    </div>
+
+    <div class="topbar-right">
+
+      <div class="system-status" id="systemStatus">
+        <span class="status-dot"></span>
+        <span data-i18n="statusConnecting">Menghubungkan…</span>
+      </div>
+
+      <label class="language-switcher" for="languageSelect">
+        <span class="sr-only" data-i18n="languageLabel">Bahasa</span>
+        <select id="languageSelect" aria-label="Bahasa" data-i18n-aria-label="languageLabel">
+          <option value="id">Indonesia</option>
+          <option value="en">English</option>
+        </select>
+      </label>
+
+      <div class="topbar-auth">
+
+        <div id="topbarAuthLoggedOut">
+
+          <button class="btn btn-primary" type="button" id="openAuthModalButton">
+            <span data-i18n="authLoginSignup">Masuk / Daftar</span>
+          </button>
+
+        </div>
+
+
+        <div class="hidden" id="topbarAuthLoggedIn">
+
+          <span class="topbar-auth-email" id="topbarAuthUserEmail"></span>
+
+          <button class="btn" type="button" id="logoutButton">
+            <span data-i18n="logout">Keluar</span>
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <main class="shell">
+
+    <!-- =========================
+         HERO
+    ========================== -->
+
+    <section class="hero">
+
+      <div class="hero-content">
+
+        <div class="terminal-tag" data-i18n="heroTag">Database Deck Komunitas Strinova Outbreak</div>
+
+        <h1>
+          <span data-i18n="heroTitle">Strinova Outbreak Decks</span><span class="cursor"></span>
+        </h1>
+
+        <p class="hero-copy">
+          <span data-i18n="heroCopy">Temukan sinergi Superstring &amp; Crystalline deck, salin kode deck langsung ke game, atau masuk untuk membagikan konfigurasi buatanmu ke seluruh komunitas.</span>
+        </p>
+
+        <div class="hero-actions">
+
+          <a href="#decks" class="btn btn-primary">
+            <span data-i18n="viewAllDecks">Lihat Semua Deck</span>
+          </a>
+
+          <a href="#upload" class="btn">
+            <span data-i18n="uploadDeck">+ Unggah Deck</span>
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <div class="hero-visual">
+
+        <img src="outbreak1.png" alt="Outbreak" />
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         SEARCH / FILTER
+    ========================== -->
+
+    <section class="panel" id="database">
+
+      <div class="panel-header">
+
+        <h2 data-i18n="searchFilter">Cari &amp; Filter Deck</h2>
+
+      </div>
+
+
+      <div class="search-row">
+
+        <label for="search" class="field-label">
+          <span data-i18n="searchLabel">Cari nama, deskripsi, kategori, author, atau kode deck</span>
+        </label>
+
+        <input
+          id="search"
+          type="search"
+          placeholder="Cari deck… misal Burning, DoT, Armor, Superstring…"
+          data-i18n-placeholder="searchPlaceholder"
+          autocomplete="off"
+        />
+
+      </div>
+
+
+      <!-- TYPE -->
+
+      <div class="filter-block">
+
+        <div class="field-label">
+          <span data-i18n="energyType">Tipe Energi</span>
+        </div>
+
+        <div class="filters" id="typeFilters">
+
+          <button class="filter active" data-type="all">
+            <span data-i18n="allTypes">Semua Tipe</span>
+          </button>
+
+          <button class="filter" data-type="Superstring">
+            Superstring
+          </button>
+
+          <button class="filter" data-type="Crystalline">
+            Crystalline
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- CATEGORY -->
+
+      <div class="filter-block">
+
+        <div class="field-label">
+          <span data-i18n="category">Kategori</span>
+        </div>
+
+        <div class="filters" id="categoryFilters">
+
+          <button class="filter active" data-category="all">
+            <span data-i18n="allCategories">Semua</span>
+          </button>
+
+          <button class="filter" data-category="Damage">
+            Damage
+          </button>
+
+          <button class="filter" data-category="DoT">
+            DoT
+          </button>
+
+          <button class="filter" data-category="Armor">
+            Armor
+          </button>
+
+          <button class="filter" data-category="Heal">
+            Heal
+          </button>
+
+          <button class="filter" data-category="Speed">
+            Speed
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         DECK LIST
+    ========================== -->
+
+    <section class="section-heading" id="decks">
+
+      <h2 data-i18n="deckList">Daftar Deck</h2>
+
+      <div class="record-count" id="recordCount">
+        <span data-i18n="loading">Memuat…</span>
+      </div>
+
+    </section>
+
+
+    <section class="deck-grid" id="deckGrid"></section>
+
+
+    <!-- EMPTY -->
+
+    <section class="empty-state hidden" id="emptyState">
+
+      <h3 data-i18n="deckNotFound">Deck tidak ditemukan</h3>
+
+      <p data-i18n="tryAnotherFilter">Coba kata kunci atau filter lain.</p>
+
+    </section>
+
+
+    <!-- =========================
+         UPLOAD
+    ========================== -->
+
+    <section class="panel upload-panel" id="upload">
+
+      <div class="panel-header">
+
+        <h2 data-i18n="uploadDeckTitle">Unggah Deck</h2>
+
+      </div>
+
+
+      <div class="empty-state hidden" id="uploadLoginNotice">
+
+        <h3 data-i18n="loginToUpload">Masuk untuk mengunggah</h3>
+
+        <p data-i18n="loginToUploadCopy">Masuk atau buat akun di atas untuk mengunggah deck.</p>
+
+      </div>
+
+
+      <form id="deckForm" class="hidden">
+
+        <div class="form-grid">
+
+          <!-- NAME -->
+
+          <div class="field">
+
+            <label for="deckName" class="field-label">
+              <span data-i18n="deckName">Nama Deck</span>
+            </label>
+
+            <input
+              id="deckName"
+              name="name"
+              maxlength="60"
+              required
+              placeholder="mis. Burning Corrosion"
+              data-i18n-placeholder="deckNamePlaceholder"
+            />
+
+          </div>
+
+
+          <!-- AUTHOR -->
+
+          <div class="field">
+
+            <label for="author" class="field-label">
+              <span data-i18n="authorName">Nama Author</span>
+            </label>
+
+            <input
+              id="author"
+              name="author"
+              maxlength="30"
+              required
+              placeholder="Nama atau nickname…"
+              data-i18n-placeholder="authorPlaceholder"
+            />
+
+          </div>
+
+
+          <!-- TYPE -->
+
+          <div class="field">
+
+            <label for="deckType" class="field-label">
+              <span data-i18n="energyType">Tipe Energi</span>
+            </label>
+
+            <select id="deckType" name="type" required>
+
+              <option value="Superstring">Superstring</option>
+
+              <option value="Crystalline">Crystalline</option>
+
+            </select>
+
+          </div>
+
+
+          <!-- CATEGORY -->
+
+          <div class="field">
+
+            <label for="category" class="field-label">
+              <span data-i18n="category">Kategori</span>
+            </label>
+
+            <select id="category" name="category" multiple required aria-describedby="categoryHint">
+
+              <option value="Damage">Damage</option>
+
+              <option value="DoT">DoT</option>
+
+              <option value="Armor">Armor</option>
+
+              <option value="Heal">Heal</option>
+
+              <option value="Speed">Speed</option>
+
+            </select>
+
+            <div class="field-hint" id="categoryHint" data-i18n="categoryHint">
+              Pilih satu atau lebih kategori.
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- DESCRIPTION -->
+
+        <div class="field">
+
+          <label for="description" class="field-label">
+            <span data-i18n="description">Deskripsi</span>
+          </label>
+
+          <textarea
+            id="description"
+            name="description"
+            maxlength="300"
+            required
+            placeholder="Jelaskan sinergi taktis dan instruksi penggunaan deck…"
+            data-i18n-placeholder="descriptionPlaceholder"
+          ></textarea>
+
+        </div>
+
+
+        <!-- CODE -->
+
+        <div class="field">
+
+          <label for="deckCode" class="field-label">
+            <span data-i18n="deckCode">Kode Deck</span>
+          </label>
+
+          <textarea
+            id="deckCode"
+            name="code"
+            class="code-input"
+            required
+            maxlength="2000"
+            placeholder="Tempel kode deck hasil export di sini…"
+            data-i18n-placeholder="codePlaceholder"
+          ></textarea>
+
+          <div class="field-hint">
+            <span data-i18n="codeHint">Akan tersimpan di database bersama setelah dikirim.</span>
+          </div>
+
+        </div>
+
+
+        <div class="form-actions">
+
+          <button class="btn btn-primary" type="submit" id="submitButton">
+            <span data-i18n="uploadDeck">Unggah Deck</span>
+          </button>
+
+          <button class="btn hidden" type="button" id="cancelEditButton">
+            <span data-i18n="cancel">Batal</span>
+          </button>
+
+        </div>
+
+      </form>
+
+
+      <!-- RESULT -->
+
+      <div class="upload-result hidden" id="uploadResult"></div>
+
+    </section>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer>
+
+      <span>Strinova Outbreak Decks</span>
+
+      <span data-i18n="unofficialDatabase">Database komunitas tidak resmi</span>
+
+    </footer>
+
+  </main>
+
+
+  <!-- =========================
+       AUTH MODAL
+  ========================== -->
+
+  <div class="modal-overlay hidden" id="authModalOverlay">
+
+    <div class="modal" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authModalTitle">
+
+      <div class="modal-header">
+
+        <h2 id="authModalTitle" data-i18n="authLoginSignup">Masuk / Daftar</h2>
+
+        <button class="modal-close" type="button" id="closeAuthModalButton" aria-label="Tutup" data-i18n-aria-label="close">
+          &times;
+        </button>
+
+      </div>
+
+
+      <form id="authForm">
+
+        <div class="field">
+
+          <label for="authEmail" class="field-label">
+            <span data-i18n="email">Email</span>
+          </label>
+
+          <input
+            id="authEmail"
+            type="email"
+            required
+            placeholder="namamu@email.com"
+            autocomplete="email"
+          />
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="authPassword" class="field-label">
+            <span data-i18n="password">Kata Sandi</span>
+          </label>
+
+          <input
+            id="authPassword"
+            type="password"
+            required
+            minlength="6"
+            placeholder="Minimal 6 karakter"
+            data-i18n-placeholder="passwordPlaceholder"
+            autocomplete="current-password"
+          />
+
+        </div>
+
+
+        <div class="form-actions">
+
+          <button class="btn btn-primary" type="submit" id="loginButton">
+            <span data-i18n="login">Masuk</span>
+          </button>
+
+          <button class="btn" type="button" id="signupButton">
+            <span data-i18n="createAccount">Buat Akun</span>
+          </button>
+
+        </div>
+
+      </form>
+
+
+      <div class="upload-result hidden" id="authResult"></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       DECK TEMPLATE
+  ========================== -->
+
+  <template id="deckTemplate">
+
+    <article class="deck-card">
+
+      <div class="card-top">
+
+        <span class="record-id"></span>
+
+        <span class="type-badge"></span>
+
+      </div>
+
+
+      <h3 class="deck-name"></h3>
+
+
+      <div class="meta-line">
+        [<span data-i18n="tag">TAG</span>: <span class="category"></span>]
+      </div>
+
+
+      <p class="description"></p>
+
+
+      <div class="code-preview">
+
+        <span data-i18n="deckCodeLabel">Kode Deck:</span>
+
+        <code></code>
+
+      </div>
+
+
+      <div class="card-bottom">
+
+        <span>
+          <span data-i18n="authorLabel">Author:</span> <strong class="author"></strong>
+        </span>
+
+        <button class="copy-btn" type="button">
+          <span data-i18n="copyCode">Salin Kode</span>
+        </button>
+
+      </div>
+
+
+      <div class="card-actions owner-actions hidden">
+
+        <button class="edit-btn" type="button">
+          <span data-i18n="edit">Edit</span>
+        </button>
+
+        <button class="delete-btn" type="button">
+          <span data-i18n="delete">Hapus</span>
+        </button>
+
+      </div>
+
+    </article>
+
+  </template>
+
+
+  <!-- =========================
+       SUPABASE
+  ========================== -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
