@@ -35,10 +35,16 @@
 
     <div class="topbar-right">
 
-      <div class="system-status" id="systemStatus">
-        <span class="status-dot"></span>
-        <span data-i18n="statusConnecting">Menghubungkan…</span>
-      </div>
+      <button
+        class="donate-icon"
+        type="button"
+        id="openDonateModalButton"
+        data-i18n-aria-label="donateMe"
+        aria-label="Donasi Saya"
+      >
+        <img src="yvette.png" alt="" />
+        <span data-i18n="donateMe">Donasi Saya</span>
+      </button>
 
       <label class="language-switcher" for="languageSelect">
         <span class="sr-only" data-i18n="languageLabel">Bahasa</span>
@@ -518,6 +524,51 @@
 
 
       <div class="upload-result hidden" id="authResult"></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       DONATION MODAL
+  ========================== -->
+
+  <div class="modal-overlay hidden" id="donateModalOverlay">
+
+    <div class="modal donate-modal" role="dialog" aria-modal="true" aria-labelledby="donateModalTitle">
+
+      <div class="modal-header">
+
+        <h2 id="donateModalTitle" data-i18n="donateTitle">Dukung Proyek Ini</h2>
+
+        <button
+          class="modal-close"
+          type="button"
+          id="closeDonateModalButton"
+          aria-label="Tutup"
+          data-i18n-aria-label="close"
+        >
+          &times;
+        </button>
+
+      </div>
+
+      <img class="donate-image" src="yvette.png" alt="" />
+
+      <p class="donate-copy" data-i18n="donateCopy">
+        Jika project ini membantu, kamu bisa mendukung pengembang melalui Saweria.
+      </p>
+
+      <a
+        class="btn btn-primary donate-link"
+        href="https://saweria.co/bryannfx"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-i18n="donateMe"
+      >
+        Donasi Saya
+      </a>
 
     </div>
 

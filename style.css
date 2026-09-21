@@ -961,6 +961,56 @@ footer {
   letter-spacing: .03em;
 }
 
+.donate-icon {
+  min-height: 38px;
+  padding: 3px 10px 3px 3px;
+  border: 1px solid var(--border-bright);
+  background: var(--surface);
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .03em;
+  transition: border-color .15s ease, transform .15s ease;
+}
+
+.donate-icon:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.donate-icon img {
+  display: block;
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+}
+
+.donate-modal {
+  text-align: center;
+}
+
+.donate-image {
+  display: block;
+  width: 96px;
+  height: 96px;
+  margin: 4px auto 16px;
+  object-fit: cover;
+  border: 1px solid var(--border-bright);
+}
+
+.donate-copy {
+  margin: 0 0 18px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.donate-link {
+  display: inline-block;
+}
+
 
 /* =========================
    RESPONSIVE

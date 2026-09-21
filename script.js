@@ -67,9 +67,6 @@ const uploadResult =
 const submitButton =
   document.querySelector("#submitButton");
 
-const systemStatus =
-  document.querySelector("#systemStatus");
-
 const cancelEditButton =
   document.querySelector("#cancelEditButton");
 
@@ -114,6 +111,15 @@ const openAuthModalButton =
 
 const closeAuthModalButton =
   document.querySelector("#closeAuthModalButton");
+
+const donateModalOverlay =
+  document.querySelector("#donateModalOverlay");
+
+const openDonateModalButton =
+  document.querySelector("#openDonateModalButton");
+
+const closeDonateModalButton =
+  document.querySelector("#closeDonateModalButton");
 
 const languageSelect =
   document.querySelector("#languageSelect");
@@ -162,6 +168,9 @@ const translations = {
     codeHint: "Akan tersimpan di database bersama setelah dikirim.",
     cancel: "Batal",
     unofficialDatabase: "Database komunitas tidak resmi",
+    donateMe: "Donasi Saya",
+    donateTitle: "Dukung Proyek Ini",
+    donateCopy: "Jika project ini membantu, kamu bisa mendukung pengembang melalui Saweria.",
     close: "Tutup",
     email: "Email",
     password: "Kata Sandi",
@@ -243,6 +252,9 @@ const translations = {
     codeHint: "It will be saved to the shared database after submission.",
     cancel: "Cancel",
     unofficialDatabase: "Unofficial community database",
+    donateMe: "Donate Me",
+    donateTitle: "Support This Project",
+    donateCopy: "If this project helps you, you can support the developer through Saweria.",
     close: "Close",
     email: "Email",
     password: "Password",
@@ -373,28 +385,12 @@ async function checkConnection() {
     }
 
 
-    systemStatus.innerHTML = `
-      <span class="status-dot"></span>
-      <span>${t("statusConnected")}</span>
-    `;
-
   } catch (error) {
 
     console.error(
       "Supabase connection error:",
       error
     );
-
-    systemStatus.innerHTML = `
-      <span
-        class="status-dot"
-        style="
-          background:var(--danger);
-          box-shadow:0 0 0 3px var(--danger-tint);
-        "
-      ></span>
-      <span>${t("statusConnectionFailed")}</span>
-    `;
 
   }
 
@@ -542,6 +538,41 @@ closeAuthModalButton.addEventListener(
   closeAuthModal
 );
 
+function openDonateModal() {
+  donateModalOverlay.querySelectorAll("[data-i18n]").forEach(element => {
+    element.textContent = t(element.dataset.i18n);
+  });
+
+  donateModalOverlay.querySelectorAll("[data-i18n-aria-label]").forEach(element => {
+    element.setAttribute("aria-label", t(element.dataset.i18nAriaLabel));
+  });
+
+  donateModalOverlay.classList.remove("hidden");
+}
+
+function closeDonateModal() {
+  donateModalOverlay.classList.add("hidden");
+}
+
+openDonateModalButton.addEventListener(
+  "click",
+  openDonateModal
+);
+
+closeDonateModalButton.addEventListener(
+  "click",
+  closeDonateModal
+);
+
+donateModalOverlay.addEventListener(
+  "click",
+  event => {
+    if (event.target === donateModalOverlay) {
+      closeDonateModal();
+    }
+  }
+);
+
 /*
   Klik di luar kotak modal
   (area overlay gelap) menutup
@@ -575,6 +606,15 @@ document.addEventListener(
     ) {
 
       closeAuthModal();
+
+    }
+
+    if (
+      event.key === "Escape" &&
+      !donateModalOverlay.classList.contains("hidden")
+    ) {
+
+      closeDonateModal();
 
     }
 
@@ -1875,6 +1915,8 @@ function escapeHTML(
 ===================================================== */
 
 async function initialize() {
+
+  openDonateModal();
 
   await checkConnection();
 
