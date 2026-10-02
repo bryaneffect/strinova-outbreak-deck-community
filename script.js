@@ -253,6 +253,7 @@ const translations = {
     saveFailed: "Gagal {action}",
     updateAction: "menyimpan perubahan",
     uploadAction: "mengunggah deck",
+    partOf: "Part Of",
     unknownDatabaseError: "Terjadi kesalahan database yang tidak diketahui."
   },
   en: {
@@ -355,6 +356,7 @@ const translations = {
     saveFailed: "Failed to {action}",
     updateAction: "save changes",
     uploadAction: "upload the deck",
+    partOf: "Part Of",
     unknownDatabaseError: "An unknown database error occurred."
   }
 };
