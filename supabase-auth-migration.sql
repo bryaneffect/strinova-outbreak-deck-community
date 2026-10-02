@@ -14,6 +14,10 @@ alter table decks
   references auth.users(id)
   on delete cascade;
 
+-- Pilihan kartu yang digunakan dalam setiap deck
+alter table decks
+  add column if not exists card_names text[] not null default '{}';
+
 
 -- 2. Pastikan Row Level Security aktif
 

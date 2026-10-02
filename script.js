@@ -58,6 +58,18 @@ const recordCount =
 const searchInput =
   document.querySelector("#search");
 
+const deckTypeInput =
+  document.querySelector("#deckType");
+
+const cardPicker =
+  document.querySelector("#cardPicker");
+
+const cardSearchInput =
+  document.querySelector("#cardSearch");
+
+const selectedCardCount =
+  document.querySelector("#selectedCardCount");
+
 const form =
   document.querySelector("#deckForm");
 
@@ -124,6 +136,17 @@ const closeDonateModalButton =
 const languageSelect =
   document.querySelector("#languageSelect");
 
+const deckDetailsModalOverlay =
+  document.querySelector("#deckDetailsModalOverlay");
+
+const deckDetailsModal =
+  document.querySelector("#deckDetailsModal");
+
+const closeDeckDetailsButton =
+  document.querySelector("#closeDeckDetailsButton");
+
+let deckDetailsReturnFocus = null;
+
 
 /* =====================================================
    LANGUAGE
@@ -142,6 +165,10 @@ const translations = {
     heroCopy: "Temukan sinergi Superstring & Crystalline deck, salin kode deck langsung ke game, atau masuk untuk membagikan konfigurasi buatanmu ke seluruh komunitas.",
     viewAllDecks: "Lihat Semua Deck",
     uploadDeck: "+ Unggah Deck",
+    newsUpdateKicker: "PEMBARUAN WEBSITE",
+    newsUpdateTitle: "Update 2 Oktober 2026",
+    newsUpdateCards: "Menambahkan gambar kartu untuk menampilkan preview isi deck yang diunggah.",
+    newsUpdateDesign: "Mengubah tema dan desain website.",
     searchFilter: "Cari & Filter Deck",
     searchLabel: "Cari nama, deskripsi, kategori, author, atau kode deck",
     searchPlaceholder: "Cari deck… misal Burning, DoT, Armor, Superstring…",
@@ -149,6 +176,16 @@ const translations = {
     allTypes: "Semua Tipe",
     category: "Kategori",
     categoryHint: "Pilih satu atau lebih kategori.",
+    cardSelection: "Kartu Deck",
+    cardSelectionHint: "Pilih semua kartu yang digunakan dalam deck ini.",
+    cardSearch: "Cari nama kartu…",
+    selectedCards: "{count} kartu dipilih",
+    deckCards: "Kartu Deck",
+    deckDetails: "Detail Deck",
+    viewDeck: "Lihat Isi Deck",
+    deckTag: "Tag",
+    noDeckCards: "Belum ada kartu yang dipilih untuk deck ini.",
+    selectAtLeastOneCard: "Pilih minimal satu kartu untuk deck ini.",
     allCategories: "Semua",
     deckList: "Daftar Deck",
     loading: "Memuat…",
@@ -168,6 +205,10 @@ const translations = {
     codeHint: "Akan tersimpan di database bersama setelah dikirim.",
     cancel: "Batal",
     unofficialDatabase: "Database komunitas tidak resmi",
+    websiteCreator: "Kreator:",
+    websiteInspiredBy: "Inspirasi:",
+    artworkBy: "Aset:",
+    footerDescription: "Website ini dibuat untuk komunitas Outbreak dan tidak bermaksud membuat ulang website resmi Strinova. Tema dan desainnya disesuaikan dengan website resmi Strinova. Semua aset yang digunakan dicantumkan beserta nama dan sumbernya.",
     donateMe: "Donasi Saya",
     donateTitle: "Dukung Proyek Ini",
     donateCopy: "Jika project ini membantu, kamu bisa mendukung pengembang melalui Saweria.",
@@ -226,6 +267,10 @@ const translations = {
     heroCopy: "Discover Superstring & Crystalline deck synergies, copy deck codes directly into the game, or sign in to share your build with the community.",
     viewAllDecks: "View All Decks",
     uploadDeck: "+ Upload Deck",
+    newsUpdateKicker: "WEBSITE UPDATE",
+    newsUpdateTitle: "October 2, 2026 Update",
+    newsUpdateCards: "Added card images to preview the contents of uploaded decks.",
+    newsUpdateDesign: "Refreshed the website theme and design.",
     searchFilter: "Search & Filter Decks",
     searchLabel: "Search by name, description, category, author, or deck code",
     searchPlaceholder: "Search decks… e.g. Burning, DoT, Armor, Superstring…",
@@ -233,6 +278,16 @@ const translations = {
     allTypes: "All Types",
     category: "Category",
     categoryHint: "Select one or more categories.",
+    cardSelection: "Deck Cards",
+    cardSelectionHint: "Select all cards used in this deck.",
+    cardSearch: "Search card names…",
+    selectedCards: "{count} cards selected",
+    deckCards: "Deck Cards",
+    deckDetails: "Deck Details",
+    viewDeck: "View Deck Contents",
+    deckTag: "Tag",
+    noDeckCards: "No cards have been selected for this deck.",
+    selectAtLeastOneCard: "Select at least one card for this deck.",
     allCategories: "All",
     deckList: "Deck List",
     loading: "Loading…",
@@ -252,6 +307,10 @@ const translations = {
     codeHint: "It will be saved to the shared database after submission.",
     cancel: "Cancel",
     unofficialDatabase: "Unofficial community database",
+    websiteCreator: "Created by:",
+    websiteInspiredBy: "Inspired by:",
+    artworkBy: "Assets:",
+    footerDescription: "This website was made for the Outbreak community and is not intended to recreate the official Strinova website. Its theme and design are adapted to align with the official Strinova website. All assets used are credited with their names and sources.",
     donateMe: "Donate Me",
     donateTitle: "Support This Project",
     donateCopy: "If this project helps you, you can support the developer through Saweria.",
@@ -313,6 +372,63 @@ function t(key, replacements = {}) {
   return text;
 }
 
+function formatCardName(name) {
+  return String(name).replace(/\b[a-z]/g, letter => letter.toUpperCase());
+}
+
+function cardImagePath(type, name) {
+  return `cards/${type.toLowerCase()}/${encodeURIComponent(name)}.png`;
+}
+
+function renderCardPicker(selectedNames = Array.from(selectedCardNames)) {
+  const cards = window.DECK_CARD_CATALOG[deckTypeInput.value] || [];
+  selectedCardNames = new Set(selectedNames);
+  const query = cardSearchInput.value.trim().toLowerCase();
+  const visibleCards = cards.filter(name => name.includes(query));
+
+  cardPicker.replaceChildren();
+
+  visibleCards.forEach(name => {
+    const label = document.createElement("label");
+    label.className = "card-option";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.name = "card_names";
+    checkbox.value = name;
+    checkbox.checked = selectedCardNames.has(name);
+
+    const image = document.createElement("img");
+    image.src = cardImagePath(deckTypeInput.value, name);
+    image.alt = "";
+    image.loading = "lazy";
+
+    const caption = document.createElement("span");
+    caption.textContent = formatCardName(name);
+
+    label.classList.toggle("is-selected", checkbox.checked);
+    label.append(checkbox, image, caption);
+    checkbox.addEventListener("change", () => {
+      if (checkbox.checked) {
+        selectedCardNames.add(name);
+      } else {
+        selectedCardNames.delete(name);
+      }
+      label.classList.toggle("is-selected", checkbox.checked);
+      updateSelectedCardCount();
+    });
+    cardPicker.append(label);
+  });
+
+  updateSelectedCardCount();
+}
+
+function updateSelectedCardCount() {
+  selectedCardCount.textContent = t("selectedCards", {
+    count: selectedCardNames.size
+  });
+}
+
 function applyLanguage() {
   document.documentElement.lang = currentLanguage;
   languageSelect.value = currentLanguage;
@@ -330,6 +446,7 @@ function applyLanguage() {
   });
 
   localStorage.setItem("outbreakDeckLanguage", currentLanguage);
+  updateSelectedCardCount();
   renderDecks();
 }
 
@@ -347,6 +464,8 @@ let decks = [];
 let activeType = "all";
 
 let activeCategory = "all";
+
+let selectedCardNames = new Set();
 
 /*
   ID deck yang sedang di-edit.
@@ -554,6 +673,54 @@ function closeDonateModal() {
   donateModalOverlay.classList.add("hidden");
 }
 
+function openDeckDetails(deck, trigger) {
+  const typeClass = deck.type.toLowerCase();
+  const typeBadge = document.querySelector("#deckDetailsType");
+  const cardsContainer = document.querySelector("#deckDetailsCards");
+
+  document.querySelector("#deckDetailsName").textContent = deck.name;
+  typeBadge.textContent = deck.type;
+  typeBadge.className = `type-badge ${typeClass}`;
+  document.querySelector("#deckDetailsCategory").textContent = deck.category || "-";
+  document.querySelector("#deckDetailsDescription").textContent = deck.description || "-";
+  document.querySelector("#deckDetailsAuthor").textContent = deck.author || "-";
+  cardsContainer.replaceChildren();
+
+  const selectedCards = Array.isArray(deck.card_names) ? deck.card_names : [];
+  if (!selectedCards.length) {
+    const emptyMessage = document.createElement("p");
+    emptyMessage.className = "deck-details-empty";
+    emptyMessage.textContent = t("noDeckCards");
+    cardsContainer.append(emptyMessage);
+  } else {
+    selectedCards.forEach(name => {
+      const item = document.createElement("figure");
+      item.className = "deck-details-card";
+
+      const image = document.createElement("img");
+      image.src = cardImagePath(deck.type, name);
+      image.alt = formatCardName(name);
+      image.loading = "lazy";
+
+      const caption = document.createElement("figcaption");
+      caption.textContent = formatCardName(name);
+
+      item.append(image, caption);
+      cardsContainer.append(item);
+    });
+  }
+
+  deckDetailsReturnFocus = trigger;
+  deckDetailsModalOverlay.classList.remove("hidden");
+  closeDeckDetailsButton.focus();
+}
+
+function closeDeckDetails() {
+  deckDetailsModalOverlay.classList.add("hidden");
+  deckDetailsReturnFocus?.focus();
+  deckDetailsReturnFocus = null;
+}
+
 openDonateModalButton.addEventListener(
   "click",
   openDonateModal
@@ -563,6 +730,14 @@ closeDonateModalButton.addEventListener(
   "click",
   closeDonateModal
 );
+
+closeDeckDetailsButton.addEventListener("click", closeDeckDetails);
+
+deckDetailsModalOverlay.addEventListener("click", event => {
+  if (event.target === deckDetailsModalOverlay) {
+    closeDeckDetails();
+  }
+});
 
 donateModalOverlay.addEventListener(
   "click",
@@ -616,6 +791,13 @@ document.addEventListener(
 
       closeDonateModal();
 
+    }
+
+    if (
+      event.key === "Escape" &&
+      !deckDetailsModalOverlay.classList.contains("hidden")
+    ) {
+      closeDeckDetails();
     }
 
   }
@@ -871,6 +1053,7 @@ async function loadDecks() {
       name,
       author,
       type,
+      card_names,
       category,
       description,
       code,
@@ -1112,6 +1295,11 @@ function renderDecks() {
       deck.description;
 
 
+    card.querySelector(".view-deck-btn").addEventListener("click", event => {
+      openDeckDetails(deck, event.currentTarget);
+    });
+
+
     /*
       CODE
     */
@@ -1238,6 +1426,9 @@ function startEditDeck(deck) {
 
   form.querySelector("#deckType").value =
     deck.type;
+
+  cardSearchInput.value = "";
+  renderCardPicker(Array.isArray(deck.card_names) ? deck.card_names : []);
 
   const selectedCategories = String(deck.category || "")
     .split(",")
@@ -1555,6 +1746,18 @@ searchInput.addEventListener(
 );
 
 
+deckTypeInput.addEventListener("change", () => {
+  selectedCardNames.clear();
+  renderCardPicker([]);
+});
+
+cardSearchInput.addEventListener("input", () => {
+  renderCardPicker();
+});
+
+renderCardPicker();
+
+
 /* =====================================================
    UPLOAD DECK
 ===================================================== */
@@ -1597,6 +1800,14 @@ form.addEventListener(
       new FormData(form);
 
 
+    if (!selectedCardNames.size) {
+      uploadResult.textContent = t("selectAtLeastOneCard");
+      uploadResult.classList.add("is-error");
+      uploadResult.classList.remove("hidden");
+      return;
+    }
+
+
     const deckPayload = {
 
       name:
@@ -1612,6 +1823,9 @@ form.addEventListener(
       type:
         formData
           .get("type"),
+
+      card_names:
+        Array.from(selectedCardNames),
 
       category:
         formData
@@ -1870,6 +2084,12 @@ cancelEditButton.addEventListener(
   "click",
   cancelEdit
 );
+
+form.addEventListener("reset", () => {
+  cardSearchInput.value = "";
+  selectedCardNames.clear();
+  window.setTimeout(() => renderCardPicker(), 0);
+});
 
 
 /* =====================================================

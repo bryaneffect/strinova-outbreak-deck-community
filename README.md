@@ -1,80 +1,74 @@
 # Strinova Outbreak Decks
 
-Strinova Outbreak Decks is a community database for sharing and discovering
-Strinova Outbreak deck configurations. Users can search public decks, filter
-them by energy type and category, copy deck codes, and manage their own decks
-after signing in.
+Strinova Outbreak Decks is a community site for sharing and discovering deck builds for Strinova Outbreak. It is an independent community project, not a recreation of the official Strinova website. Its visual theme is inspired by the official site.
 
 ## Features
 
-- Search by deck name, description, category, author, or deck code
-- Filter by Superstring or Crystalline energy type
-- Filter by Damage, DoT, Armor, Heal, or Speed category
-- Assign more than one category to a deck
-- Copy deck codes to the clipboard
-- Email/password authentication with Supabase
-- Upload, edit, and delete decks owned by the signed-in user
-- Public deck browsing for signed-out visitors
-- English and Indonesian interface languages
-- Language preference saved in browser local storage
-- Responsive terminal-inspired interface
+- Browse public decks without signing in.
+- Search by deck name, description, category, author, or deck code.
+- Filter decks by Superstring or Crystalline energy type and by category.
+- Open a deck details dialog to view its tags, description, author, and selected cards.
+- Copy deck codes.
+- Sign in with Supabase email authentication to upload, edit, or delete your own decks.
+- Select multiple Superstring or Crystalline card images when creating or editing a deck.
+- Search the card picker by name and preview saved card selections in deck details.
+- Switch between Indonesian and English; the language preference is saved in local storage.
+- View website updates and a responsive layout for desktop and mobile screens.
 
 ## Requirements
 
-- A Supabase project
+- A Supabase project with email authentication enabled
 - A modern web browser
-- A static web server for local development, or a host that serves static files
+- A static web server or static hosting provider
 
-Node.js is not required by the application itself.
+The application does not require Node.js. A local static server is recommended; opening `index.html` directly may also work, depending on browser restrictions and network access.
 
 ## Setup
 
-1. Clone or download this repository.
-2. Create a Supabase project.
-3. Create a `decks` table with the following columns:
-   - `id` - integer or identity primary key
-   - `name` - text
-   - `author` - text
-   - `type` - text
-   - `category` - text
-   - `description` - text
-   - `code` - text
-   - `created_at` - timestamp with time zone, preferably defaulting to `now()`
-4. Update `SUPABASE_URL` and `SUPABASE_KEY` in `script.js` with the project URL
-   and publishable key.
-5. Run `supabase-auth-migration.sql` in the Supabase SQL Editor. This adds
-   ownership and Row Level Security policies for authentication.
-6. Serve the project directory and open `index.html` in the browser.
+1. Create a Supabase project and enable email authentication.
+2. Create a `public.decks` table with these columns:
 
-The application can also be opened directly as a local HTML file, but a local
-static server is recommended for a more predictable browser environment.
+   | Column | Type | Notes |
+   | --- | --- | --- |
+   | `id` | integer or identity primary key | Unique deck identifier |
+   | `name` | text | Deck name |
+   | `author` | text | Author display name |
+   | `type` | text | `Superstring` or `Crystalline` |
+   | `category` | text | Categories stored as comma-separated text |
+   | `description` | text | Deck description |
+   | `code` | text | Exported deck code |
+   | `created_at` | timestamptz | Set a default of `now()` |
 
-## Supabase Security
+3. Set `SUPABASE_URL` and `SUPABASE_KEY` in `script.js` to your project URL and publishable key. Do not use a service role key in client-side code.
+4. Run `supabase-auth-migration.sql` in the Supabase SQL Editor. The migration adds `user_id` and `card_names`, enables row-level security, and creates policies for public reads and owner-only inserts, updates, and deletes.
+5. If the new `card_names` column is not immediately recognized by the API, reload the PostgREST schema cache from the Supabase SQL Editor:
 
-Only use the Supabase publishable key in client-side code. Never put a
-`service_role` key in `script.js` or any file deployed to the browser.
+   ```sql
+   notify pgrst, 'reload schema';
+   ```
 
-The migration makes deck reads public, while inserts, updates, and deletes
-are restricted to the authenticated owner of each deck. Configure email
-authentication in the Supabase dashboard before testing registration and
-login.
+6. Serve the project directory with a static server or deploy it to a static host, then open `index.html`.
 
-## Multi-Category Storage
+The migration is designed for the existing `decks` table and does not create the base table. Apply it to the same Supabase project configured in `script.js`.
 
-The current client stores multiple categories in the existing `category` text
-column as a comma-separated value, for example:
+## Deck Data
 
-```text
-Damage, Armor
-```
+The `category` column stores one or more category names separated by commas, such as `Damage, Armor`. The `card_names` column stores the selected card filenames as a PostgreSQL text array. The application uses the deck's `type` to locate each card image in the corresponding card folder.
 
-The application splits this value when filtering or editing a deck.
+Decks created before card selection was added may have an empty `card_names` array. Edit those decks, select their cards, and save to add the card preview.
+
+## Assets and Credits
+
+- `cards/superstring/` and `cards/crystalline/` contain the card PNG files.
+- `cards.js` lists the card names used by the upload picker.
+- `assets/news/` contains the website update banner and preview images.
+- `yvette summer.png`, `strinova-logo.png`, and `yvette.png` are used in the page design.
+- The footer identifies Strinova as the source of artwork and the inspiration for the site's visual theme. This project is an unofficial community resource and is not affiliated with the official Strinova website.
 
 ## Project Files
 
-- `index.html` - application markup and the deck card template
-- `script.js` - Supabase integration, authentication, filtering, language
-  switching, and deck actions
-- `style.css` - interface styling and responsive layout
-- `supabase-auth-migration.sql` - authentication and Row Level Security setup
-- `outbreak1.png` and `strinova-logo.png` - interface assets
+- `index.html` contains the page structure, update section, deck template, and dialogs.
+- `script.js` contains the Supabase client, authentication, deck operations, filtering, localization, and card previews.
+- `cards.js` contains the Superstring and Crystalline card catalog.
+- `style.css` contains the responsive layout and visual theme.
+- `supabase-auth-migration.sql` adds ownership and card selection columns and configures row-level security policies.

@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Saira:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap"
     rel="stylesheet"
   />
 
@@ -29,9 +29,15 @@
 
     <div class="wordmark">
       <img src="strinova-logo.png" alt="Strinova" class="wordmark-logo" />
-      Outbreak Decks
-      <span class="wordmark-badge">Strinova Community Database</span>
+      <span class="wordmark-divider" aria-hidden="true"></span>
+      <span class="wordmark-title">OUTBREAK<br />DECKS</span>
     </div>
+
+    <nav class="primary-nav" aria-label="Navigasi utama">
+      <a href="#decks" data-i18n="deckList">Daftar Deck</a>
+      <a href="#database" data-i18n="searchFilter">Cari &amp; Filter Deck</a>
+      <a href="#upload" data-i18n="uploadDeckTitle">Unggah Deck</a>
+    </nav>
 
     <div class="topbar-right">
 
@@ -90,12 +96,14 @@
 
     <section class="hero">
 
+      <div class="hero-backdrop" aria-hidden="true"></div>
+
       <div class="hero-content">
 
-        <div class="terminal-tag" data-i18n="heroTag">Database Deck Komunitas Strinova Outbreak</div>
+        <div class="terminal-tag" data-i18n="heroTag">DATABASE DECK KOMUNITAS STRINOVA OUTBREAK</div>
 
         <h1>
-          <span data-i18n="heroTitle">Strinova Outbreak Decks</span><span class="cursor"></span>
+          <span data-i18n="heroTitle">Strinova Outbreak Decks</span>
         </h1>
 
         <p class="hero-copy">
@@ -103,7 +111,6 @@
         </p>
 
         <div class="hero-actions">
-
           <a href="#decks" class="btn btn-primary">
             <span data-i18n="viewAllDecks">Lihat Semua Deck</span>
           </a>
@@ -117,9 +124,42 @@
       </div>
 
 
-      <div class="hero-visual">
+    </section>
 
-        <img src="outbreak1.png" alt="Outbreak" />
+
+    <!-- =========================
+         NEWS / UPDATE
+    ========================== -->
+
+    <section class="news-update" aria-labelledby="newsUpdateTitle">
+
+      <div class="news-update-gallery">
+
+        <div class="news-update-image news-update-image-main">
+          <img src="assets/news/update2oct.png" alt="Strinova Outbreak Decks — New Update, 2 October 2026" />
+        </div>
+
+        <div class="news-update-image">
+          <img src="assets/news/website.png" alt="Website theme update preview" />
+        </div>
+
+        <div class="news-update-image">
+          <img src="assets/news/deckcardpreview.png" alt="Deck card preview update" />
+        </div>
+
+      </div>
+
+      <div class="news-update-content">
+
+        <div class="news-update-heading">
+          <span class="news-update-kicker" data-i18n="newsUpdateKicker">PEMBARUAN WEBSITE</span>
+          <h2 id="newsUpdateTitle" data-i18n="newsUpdateTitle">Update 2 Oktober 2026</h2>
+        </div>
+
+        <ul class="news-update-list">
+          <li data-i18n="newsUpdateCards">Menambahkan gambar kartu untuk menampilkan preview isi deck yang diunggah.</li>
+          <li data-i18n="newsUpdateDesign">Mengubah tema dan desain website.</li>
+        </ul>
 
       </div>
 
@@ -338,6 +378,28 @@
           </div>
 
 
+          <!-- CARDS -->
+
+          <div class="field card-selection-field">
+
+            <div class="field-label" id="cardSelectionLabel" data-i18n="cardSelection">
+              Kartu Deck
+            </div>
+
+            <div class="field-hint" data-i18n="cardSelectionHint">
+              Pilih semua kartu yang digunakan dalam deck ini.
+            </div>
+
+            <label class="sr-only" for="cardSearch" data-i18n="cardSearch">Cari nama kartu</label>
+            <input id="cardSearch" type="search" autocomplete="off" data-i18n-placeholder="cardSearch" placeholder="Cari nama kartu…" />
+
+            <div class="card-picker" id="cardPicker" role="group" aria-labelledby="cardSelectionLabel"></div>
+
+            <div class="field-hint" id="selectedCardCount" aria-live="polite"></div>
+
+          </div>
+
+
           <!-- CATEGORY -->
 
           <div class="field">
@@ -442,13 +504,82 @@
 
     <footer>
 
-      <span>Strinova Outbreak Decks</span>
+      <div class="footer-left">
+        <span>Strinova Outbreak Decks</span>
+        <span><span data-i18n="websiteCreator">Kreator:</span> Bryan / SuaminyaYvette</span>
+        <span data-i18n="unofficialDatabase">Database komunitas tidak resmi</span>
+      </div>
 
-      <span data-i18n="unofficialDatabase">Database komunitas tidak resmi</span>
+      <div class="footer-right">
+        <span>
+          <span data-i18n="websiteInspiredBy">Inspirasi:</span>
+          <a href="https://www.strinova.com/en-US" target="_blank" rel="noopener noreferrer">Strinova</a>
+        </span>
+        <span>
+          <span data-i18n="artworkBy">Assets oleh</span>
+          <a href="https://strinova.org/wiki/Outbreak" target="_blank" rel="noopener noreferrer">Strinova Wiki</a>
+        </span>
+      </div>
+
+      <p class="footer-description" data-i18n="footerDescription">
+        Website ini dibuat untuk komunitas Outbreak dan tidak bermaksud membuat ulang website resmi Strinova. Tema dan desainnya disesuaikan dengan website resmi Strinova. Semua aset yang digunakan dicantumkan beserta nama dan sumbernya.
+      </p>
 
     </footer>
 
   </main>
+
+
+  <!-- =========================
+       DECK DETAILS MODAL
+  ========================== -->
+
+  <div class="modal-overlay hidden" id="deckDetailsModalOverlay">
+
+    <div class="modal deck-details-modal" id="deckDetailsModal" role="dialog" aria-modal="true" aria-labelledby="deckDetailsTitle" tabindex="-1">
+
+      <div class="modal-header">
+
+        <h2 id="deckDetailsTitle" data-i18n="deckDetails">Detail Deck</h2>
+
+        <button class="modal-close" type="button" id="closeDeckDetailsButton" aria-label="Tutup" data-i18n-aria-label="close">
+          &times;
+        </button>
+
+      </div>
+
+      <div class="deck-details-body">
+
+        <div class="deck-details-heading">
+          <h3 id="deckDetailsName"></h3>
+          <span class="type-badge" id="deckDetailsType"></span>
+        </div>
+
+        <div class="deck-detail-field">
+          <h4 data-i18n="deckTag">Tag</h4>
+          <p id="deckDetailsCategory"></p>
+        </div>
+
+        <div class="deck-detail-field">
+          <h4 data-i18n="description">Deskripsi</h4>
+          <p id="deckDetailsDescription"></p>
+        </div>
+
+        <div class="deck-detail-field">
+          <h4 data-i18n="authorLabel">Author:</h4>
+          <p id="deckDetailsAuthor"></p>
+        </div>
+
+        <section class="deck-details-card-section">
+          <h4 data-i18n="deckCards">Kartu Deck</h4>
+          <div class="deck-details-cards" id="deckDetailsCards"></div>
+        </section>
+
+      </div>
+
+    </div>
+
+  </div>
 
 
   <!-- =========================
@@ -603,6 +734,11 @@
       <p class="description"></p>
 
 
+      <button class="view-deck-btn" type="button">
+        <span data-i18n="viewDeck">Lihat Isi Deck</span>
+      </button>
+
+
       <div class="code-preview">
 
         <span data-i18n="deckCodeLabel">Kode Deck:</span>
@@ -647,6 +783,8 @@
   ========================== -->
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script src="cards.js"></script>
 
   <script src="script.js"></script>
 
