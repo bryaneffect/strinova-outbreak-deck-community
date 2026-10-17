@@ -82,9 +82,6 @@
 
   <main class="shell">
 
-    <!-- =========================
-         HERO
-    ========================== -->
 
     <section class="hero">
 
@@ -119,9 +116,6 @@
     </section>
 
 
-    <!-- =========================
-         NEWS / UPDATE
-    ========================== -->
 
     <section class="news-update" aria-labelledby="newsUpdateTitle">
 
@@ -158,9 +152,6 @@
     </section>
 
 
-    <!-- =========================
-         SEARCH / FILTER
-    ========================== -->
 
     <section class="panel" id="database">
 
@@ -188,8 +179,6 @@
       </div>
 
 
-      <!-- TYPE -->
-
       <div class="filter-block">
 
         <div class="field-label">
@@ -214,8 +203,6 @@
 
       </div>
 
-
-      <!-- CATEGORY -->
 
       <div class="filter-block">
 
@@ -256,9 +243,6 @@
     </section>
 
 
-    <!-- =========================
-         DECK LIST
-    ========================== -->
 
     <section class="section-heading" id="decks">
 
@@ -274,8 +258,6 @@
     <section class="deck-grid" id="deckGrid"></section>
 
 
-    <!-- EMPTY -->
-
     <section class="empty-state hidden" id="emptyState">
 
       <h3 data-i18n="deckNotFound">No decks found</h3>
@@ -285,9 +267,6 @@
     </section>
 
 
-    <!-- =========================
-         UPLOAD
-    ========================== -->
 
     <section class="panel upload-panel" id="upload">
 
@@ -311,8 +290,6 @@
 
         <div class="form-grid">
 
-          <!-- NAME -->
-
           <div class="field">
 
             <label for="deckName" class="field-label">
@@ -330,8 +307,6 @@
 
           </div>
 
-
-          <!-- AUTHOR -->
 
           <div class="field">
 
@@ -353,8 +328,6 @@
 
           <div class="energy-category-row">
 
-            <!-- TYPE -->
-
             <div class="field">
 
               <label for="deckType" class="field-label">
@@ -371,8 +344,6 @@
 
             </div>
 
-
-            <!-- CATEGORY -->
 
             <fieldset class="field category-field" aria-describedby="categoryHint">
 
@@ -416,8 +387,6 @@
           </div>
 
 
-          <!-- CARDS -->
-
           <div class="field card-selection-field">
 
             <div class="field-label" id="cardSelectionLabel" data-i18n="cardSelection">
@@ -440,9 +409,7 @@
         </div>
 
 
-        <!-- DESCRIPTION -->
-
-        <div class="field">
+        <div class="field description-field">
 
           <label for="description" class="field-label">
             <span data-i18n="description">Description</span>
@@ -459,8 +426,6 @@
 
         </div>
 
-
-        <!-- CODE -->
 
         <div class="field">
 
@@ -500,16 +465,11 @@
       </form>
 
 
-      <!-- RESULT -->
-
       <div class="upload-result hidden" id="uploadResult"></div>
 
     </section>
 
 
-    <!-- =========================
-         FOOTER
-    ========================== -->
 
     <footer>
 
@@ -543,9 +503,6 @@
   </main>
 
 
-  <!-- =========================
-       DECK DETAILS MODAL
-  ========================== -->
 
   <div class="modal-overlay hidden" id="deckDetailsModalOverlay">
 
@@ -595,9 +552,6 @@
   </div>
 
 
-  <!-- =========================
-       AUTH MODAL
-  ========================== -->
 
   <div class="modal-overlay hidden" id="authModalOverlay">
 
@@ -684,9 +638,6 @@
   </div>
 
 
-  <!-- =========================
-       DONATION MODAL
-  ========================== -->
 
   <div class="modal-overlay hidden" id="donateModalOverlay">
 
@@ -729,9 +680,6 @@
   </div>
 
 
-  <!-- =========================
-       DECK TEMPLATE
-  ========================== -->
 
   <template id="deckTemplate">
 
@@ -801,9 +749,6 @@
   </template>
 
 
-  <!-- =========================
-       SUPABASE
-  ========================== -->
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 

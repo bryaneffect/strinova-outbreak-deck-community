@@ -1,12 +1,5 @@
-/* =====================================================
-   STRINOVA OUTBREAK DECKS
-   SUPABASE V1
-===================================================== */
 
 
-/* =====================================================
-   SUPABASE CONFIG
-===================================================== */
 
 const SUPABASE_URL =
   "https://midfyybrkgcnxewqbsbw.supabase.co";
@@ -15,9 +8,6 @@ const SUPABASE_KEY =
   "sb_publishable_G77_R1aK453uHwTAUiIcgg_twxaiScv";
 
 
-/* =====================================================
-   CREATE SUPABASE CLIENT
-===================================================== */
 
 const {
   createClient
@@ -30,9 +20,6 @@ const supabaseClient =
   );
 
 
-/* =====================================================
-   DOM
-===================================================== */
 
 const deckGrid =
   document.querySelector("#deckGrid");
@@ -133,9 +120,6 @@ const closeDeckDetailsButton =
 let deckDetailsReturnFocus = null;
 
 
-/* =====================================================
-   LANGUAGE
-===================================================== */
 
 const translations = {
   en: {
@@ -255,8 +239,55 @@ function t(key, replacements = {}) {
   return text;
 }
 
+const defaultCardsByType = {
+  Superstring: new Set([
+    "resurgence",
+    "defense first",
+    "assailant",
+    "relentless assault",
+    "berserker",
+    "thunderstrike",
+    "jump power",
+    "movement speed",
+    "max hp",
+    "max armor",
+    "bouncy shot",
+    "hit and run",
+    "sustained vitality",
+    "full armor",
+    "rapid reload"
+  ]),
+  Crystalline: new Set([
+    "forbidden claws",
+    "comeback",
+    "claws",
+    "unarmord claws",
+    "stattering leap",
+    "rusher",
+    "light of life",
+    "enhanced armor",
+    "leaper",
+    "sprinter",
+    "bloodrage",
+    "armor devourer"
+  ])
+};
+
+const cardDisplayNameOverrides = {
+  "unarmord claws": "Unarmored Claws",
+  "stattering leap": "Shattering Leap"
+};
+
 function formatCardName(name) {
+  if (cardDisplayNameOverrides[name]) {
+    return cardDisplayNameOverrides[name];
+  }
+
   return String(name).replace(/\b[a-z]/g, letter => letter.toUpperCase());
+}
+
+function isDefaultCard(type, name) {
+  return defaultCardsByType[type]?.has(name) || false;
 }
 
 function cardImagePath(type, name) {
@@ -264,8 +295,10 @@ function cardImagePath(type, name) {
 }
 
 function renderCardPicker(selectedNames = Array.from(selectedCardNames)) {
-  const cards = window.DECK_CARD_CATALOG[deckTypeInput.value] || [];
-  selectedCardNames = new Set(selectedNames);
+  const type = deckTypeInput.value;
+  const cards = window.DECK_CARD_CATALOG[type] || [];
+  const defaultCards = defaultCardsByType[type] || new Set();
+  selectedCardNames = new Set([...selectedNames, ...defaultCards]);
   const query = cardSearchInput.value.trim().toLowerCase();
   const visibleCards = cards.filter(name => name.includes(query));
 
@@ -280,6 +313,7 @@ function renderCardPicker(selectedNames = Array.from(selectedCardNames)) {
     checkbox.name = "card_names";
     checkbox.value = name;
     checkbox.checked = selectedCardNames.has(name);
+    checkbox.disabled = isDefaultCard(type, name);
 
     const image = document.createElement("img");
     image.src = cardImagePath(deckTypeInput.value, name);
@@ -289,8 +323,17 @@ function renderCardPicker(selectedNames = Array.from(selectedCardNames)) {
     const caption = document.createElement("span");
     caption.textContent = formatCardName(name);
 
+    if (isDefaultCard(type, name)) {
+      const defaultBadge = document.createElement("span");
+      defaultBadge.className = "default-card-badge";
+      defaultBadge.textContent = "DEFAULT";
+      defaultBadge.setAttribute("aria-label", "Default card; always included");
+      label.append(checkbox, image, caption, defaultBadge);
+    } else {
+      label.append(checkbox, image, caption);
+    }
+
     label.classList.toggle("is-selected", checkbox.checked);
-    label.append(checkbox, image, caption);
     checkbox.addEventListener("change", () => {
       if (checkbox.checked) {
         selectedCardNames.add(name);
@@ -329,9 +372,6 @@ function applyTranslations() {
   renderDecks();
 }
 
-/* =====================================================
-   STATE
-===================================================== */
 
 let decks = [];
 
@@ -357,9 +397,6 @@ let currentUser = null;
 applyTranslations();
 
 
-/* =====================================================
-   DATABASE CONNECTION TEST
-===================================================== */
 
 async function checkConnection() {
 
@@ -390,9 +427,6 @@ async function checkConnection() {
 }
 
 
-/* =====================================================
-   AUTH — INIT
-===================================================== */
 
 async function initAuth() {
 
@@ -432,9 +466,6 @@ async function initAuth() {
 }
 
 
-/* =====================================================
-   AUTH — UPDATE UI
-===================================================== */
 
 function updateAuthUI() {
 
@@ -499,9 +530,6 @@ function updateAuthUI() {
 }
 
 
-/* =====================================================
-   AUTH MODAL — OPEN / CLOSE
-===================================================== */
 
 function openAuthModal() {
 
@@ -580,6 +608,12 @@ function openDeckDetails(deck, trigger) {
       caption.textContent = formatCardName(name);
 
       item.append(image, caption);
+      if (isDefaultCard(deck.type, name)) {
+        const defaultBadge = document.createElement("span");
+        defaultBadge.className = "default-card-badge";
+        defaultBadge.textContent = "DEFAULT";
+        item.append(defaultBadge);
+      }
       cardsContainer.append(item);
     });
   }
@@ -678,9 +712,6 @@ document.addEventListener(
 );
 
 
-/* =====================================================
-   AUTH — RESULT MESSAGE
-===================================================== */
 
 function showAuthResult(
   message,
@@ -712,9 +743,6 @@ function showAuthResult(
 }
 
 
-/* =====================================================
-   AUTH — LOGIN
-===================================================== */
 
 authForm.addEventListener(
   "submit",
@@ -785,9 +813,6 @@ authForm.addEventListener(
 );
 
 
-/* =====================================================
-   AUTH — SIGN UP
-===================================================== */
 
 signupButton.addEventListener(
   "click",
@@ -899,9 +924,6 @@ signupButton.addEventListener(
 );
 
 
-/* =====================================================
-   AUTH — LOGOUT
-===================================================== */
 
 logoutButton.addEventListener(
   "click",
@@ -913,9 +935,6 @@ logoutButton.addEventListener(
 );
 
 
-/* =====================================================
-   LOAD DECKS
-===================================================== */
 
 async function loadDecks() {
 
@@ -981,9 +1000,6 @@ async function loadDecks() {
 }
 
 
-/* =====================================================
-   FILTER DATA
-===================================================== */
 
 function getFilteredDecks() {
 
@@ -1066,9 +1082,6 @@ function getFilteredDecks() {
 }
 
 
-/* =====================================================
-   RENDER DECKS
-===================================================== */
 
 function renderDecks() {
 
@@ -1289,9 +1302,6 @@ function renderDecks() {
 }
 
 
-/* =====================================================
-   START EDIT DECK
-===================================================== */
 
 function startEditDeck(deck) {
 
@@ -1347,9 +1357,6 @@ function startEditDeck(deck) {
 }
 
 
-/* =====================================================
-   CANCEL EDIT
-===================================================== */
 
 function cancelEdit() {
 
@@ -1371,9 +1378,6 @@ function cancelEdit() {
 }
 
 
-/* =====================================================
-   DELETE DECK
-===================================================== */
 
 async function deleteDeck(
   deck,
@@ -1460,9 +1464,6 @@ async function deleteDeck(
 }
 
 
-/* =====================================================
-   COPY DECK
-===================================================== */
 
 async function copyDeck(
   code,
@@ -1509,9 +1510,6 @@ async function copyDeck(
 }
 
 
-/* =====================================================
-   FILTER BUTTON HELPER
-===================================================== */
 
 function setActiveFilter(
   group,
@@ -1538,9 +1536,6 @@ function setActiveFilter(
 }
 
 
-/* =====================================================
-   TYPE FILTER
-===================================================== */
 
 document
   .querySelector(
@@ -1577,9 +1572,6 @@ document
   );
 
 
-/* =====================================================
-   CATEGORY FILTER
-===================================================== */
 
 document
   .querySelector(
@@ -1616,9 +1608,6 @@ document
   );
 
 
-/* =====================================================
-   SEARCH
-===================================================== */
 
 searchInput.addEventListener(
   "input",
@@ -1638,9 +1627,6 @@ cardSearchInput.addEventListener("input", () => {
 renderCardPicker();
 
 
-/* =====================================================
-   UPLOAD DECK
-===================================================== */
 
 form.addEventListener(
   "submit",
@@ -1964,9 +1950,6 @@ form.addEventListener(
 );
 
 
-/* =====================================================
-   CANCEL EDIT BUTTON
-===================================================== */
 
 cancelEditButton.addEventListener(
   "click",
@@ -1980,9 +1963,6 @@ form.addEventListener("reset", () => {
 });
 
 
-/* =====================================================
-   HTML ESCAPE
-===================================================== */
 
 function escapeHTML(
   value
@@ -2018,9 +1998,6 @@ function escapeHTML(
 }
 
 
-/* =====================================================
-   INITIALIZE
-===================================================== */
 
 async function initialize() {
 
