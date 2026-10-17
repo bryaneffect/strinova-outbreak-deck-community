@@ -8,18 +8,6 @@
    SUPABASE CONFIG
 ===================================================== */
 
-/*
-  GANTI 2 VALUE DI BAWAH INI
-
-  SUPABASE_URL:
-  Project URL milik kamu.
-
-  SUPABASE_KEY:
-  Publishable key / anon key milik kamu.
-
-  JANGAN masukkan service_role key di sini.
-*/
-
 const SUPABASE_URL =
   "https://midfyybrkgcnxewqbsbw.supabase.co";
 
@@ -234,7 +222,7 @@ const translations = {
     fillCredentials: "Enter your email and password first.",
     passwordMin: "Password must be at least 6 characters.",
     accountCreated: "Account created successfully. Please log in.",
-    confirmEmail: "Account created successfully. Check your email to confirm it, then log in.",
+    confirmEmail: "Account successfully created. Please check your email to confirm, if you don't see it, check your spam folder, then log in.",
     signupFailed: "Sign up failed.",
     saveChanges: "Save Changes",
     deleteConfirm: "Delete deck \"{name}\"? This action cannot be undone.",
