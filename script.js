@@ -42,6 +42,9 @@ const cardPicker =
 const cardSearchInput =
   document.querySelector("#cardSearch");
 
+const cardRarityFilters =
+  document.querySelector("#cardRarityFilters");
+
 const selectedCardCount =
   document.querySelector("#selectedCardCount");
 
@@ -142,6 +145,9 @@ const translations = {
     newsUpdateDesign: "Refreshed the website theme and design.",
     newsUpdateLogin: "Improved login verification.",
     newsUpdateRemoved: "Removed Indonesian language.",
+    newsUpdateCardRarity: "Updated card rarity colors.",
+    newsUpdateCardOrder: "Reordered card display.",
+    newsUpdateRarity: "Updated card rarity filtering.",
     newsUpdateCategories: "Category filtering updated",
     searchFilter: "Search & Filter Decks",
     searchLabel: "Search by name, description, category, author, or deck code",
@@ -154,6 +160,10 @@ const translations = {
     cardSelection: "Deck Cards",
     cardSelectionHint: "Select all cards used in this deck.",
     cardSearch: "Search card names…",
+    allRarities: "All rarities",
+    epic: "Epic",
+    rare: "Rare",
+    refined: "Refined",
     selectedCards: "{count} cards selected",
     deckCards: "Deck Cards",
     deckDetails: "Deck Details",
@@ -278,8 +288,19 @@ const defaultCardsByType = {
 };
 
 const cardDisplayNameOverrides = {
+  "assasin": "Assassin",
+  "crystal plauge": "Crystal Plague",
+  "drumbstick combo": "Drumstick Combo",
+  "enchanted skill": "Enchanted Shell",
+  "enhanced granade": "Enhanced Grenade",
+  "enhanced slow granade": "Enhanced Slow Grenade",
+  "lone suvivor": "Lone Survivor",
+  "repture": "Rupture",
+  "stattering leap": "Shattering Leap",
+  "sunbrust armor": "Sunburst Armor",
   "unarmord claws": "Unarmored Claws",
-  "stattering leap": "Shattering Leap"
+  "ultimate ready!": "Ultimate Ready!",
+  "wariors solitude": "Warriors Solitude"
 };
 
 function formatCardName(name) {
@@ -298,13 +319,27 @@ function cardImagePath(type, name) {
   return `cards/${type.toLowerCase()}/${encodeURIComponent(name)}.png`;
 }
 
+function orderCardNames(type, names) {
+  const remainingNames = new Set(names);
+  const orderedNames = (window.DECK_CARD_CATALOG[type] || [])
+    .filter(name => remainingNames.delete(name));
+
+  return [...orderedNames, ...remainingNames];
+}
+
 function renderCardPicker(selectedNames = Array.from(selectedCardNames)) {
   const type = deckTypeInput.value;
   const cards = window.DECK_CARD_CATALOG[type] || [];
   const defaultCards = defaultCardsByType[type] || new Set();
   selectedCardNames = new Set([...selectedNames, ...defaultCards]);
   const query = cardSearchInput.value.trim().toLowerCase();
-  const visibleCards = cards.filter(name => name.includes(query));
+  const visibleCards = cards.filter(name => {
+    const matchesSearch = name.includes(query);
+    const matchesRarity = activeCardRarity === "all"
+      || window.DECK_CARD_RARITY[type]?.[name] === activeCardRarity;
+
+    return matchesSearch && matchesRarity;
+  });
 
   cardPicker.replaceChildren();
 
@@ -319,22 +354,34 @@ function renderCardPicker(selectedNames = Array.from(selectedCardNames)) {
     checkbox.checked = selectedCardNames.has(name);
     checkbox.disabled = isDefaultCard(type, name);
 
+    const artwork = document.createElement("div");
+    artwork.className = "card-artwork";
+
     const image = document.createElement("img");
     image.src = cardImagePath(deckTypeInput.value, name);
     image.alt = "";
     image.loading = "lazy";
+    artwork.append(image);
 
     const caption = document.createElement("span");
+    caption.className = "card-title";
     caption.textContent = formatCardName(name);
+
+    const rarity = window.DECK_CARD_RARITY[type]?.[name];
+    const rarityPanel = document.createElement("span");
+    rarityPanel.className = "card-rarity-panel";
+    rarityPanel.textContent = rarity ? rarity.toUpperCase() : "";
+    label.append(checkbox, artwork, caption, rarityPanel);
+    if (rarity) {
+      label.classList.add(`rarity-${rarity}`);
+    }
 
     if (isDefaultCard(type, name)) {
       const defaultBadge = document.createElement("span");
       defaultBadge.className = "default-card-badge";
       defaultBadge.textContent = "DEFAULT";
       defaultBadge.setAttribute("aria-label", "Default card; always included");
-      label.append(checkbox, image, caption, defaultBadge);
-    } else {
-      label.append(checkbox, image, caption);
+      label.append(defaultBadge);
     }
 
     label.classList.toggle("is-selected", checkbox.checked);
@@ -384,6 +431,8 @@ let activeType = "all";
 let activeCategory = "all";
 
 let selectedCardNames = new Set();
+
+let activeCardRarity = "all";
 
 /*
   ID deck yang sedang di-edit.
@@ -592,7 +641,9 @@ function openDeckDetails(deck, trigger) {
   document.querySelector("#deckDetailsAuthor").textContent = deck.author || "-";
   cardsContainer.replaceChildren();
 
-  const selectedCards = Array.isArray(deck.card_names) ? deck.card_names : [];
+  const selectedCards = Array.isArray(deck.card_names)
+    ? orderCardNames(deck.type, deck.card_names)
+    : [];
   if (!selectedCards.length) {
     const emptyMessage = document.createElement("p");
     emptyMessage.className = "deck-details-empty";
@@ -602,16 +653,29 @@ function openDeckDetails(deck, trigger) {
     selectedCards.forEach(name => {
       const item = document.createElement("figure");
       item.className = "deck-details-card";
+      const rarity = window.DECK_CARD_RARITY[deck.type]?.[name];
+      if (rarity) {
+        item.classList.add(`rarity-${rarity}`);
+      }
+
+      const artwork = document.createElement("div");
+      artwork.className = "card-artwork";
 
       const image = document.createElement("img");
       image.src = cardImagePath(deck.type, name);
       image.alt = formatCardName(name);
       image.loading = "lazy";
+      artwork.append(image);
 
       const caption = document.createElement("figcaption");
+      caption.className = "card-title";
       caption.textContent = formatCardName(name);
 
-      item.append(image, caption);
+      const rarityPanel = document.createElement("div");
+      rarityPanel.className = "card-rarity-panel";
+      rarityPanel.textContent = rarity ? rarity.toUpperCase() : "";
+
+      item.append(artwork, caption, rarityPanel);
       if (isDefaultCard(deck.type, name)) {
         const defaultBadge = document.createElement("span");
         defaultBadge.className = "default-card-badge";
@@ -1625,6 +1689,21 @@ deckTypeInput.addEventListener("change", () => {
 });
 
 cardSearchInput.addEventListener("input", () => {
+  renderCardPicker();
+});
+
+cardRarityFilters.addEventListener("click", event => {
+  const button = event.target.closest("[data-card-rarity]");
+  if (!button) {
+    return;
+  }
+
+  activeCardRarity = button.dataset.cardRarity;
+  cardRarityFilters.querySelectorAll("[data-card-rarity]").forEach(filterButton => {
+    const isActive = filterButton === button;
+    filterButton.classList.toggle("active", isActive);
+    filterButton.setAttribute("aria-pressed", String(isActive));
+  });
   renderCardPicker();
 });
 

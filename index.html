@@ -153,6 +153,9 @@
           <li data-i18n="newsUpdateCategories">Category filtering updated</li>
           <li data-i18n="newsUpdateLogin">Login verification improved</li>
           <li data-i18n="newsUpdateRemoved">Removed Indonesian language</li>
+          <li data-i18n="newsUpdateCardRarity">Updated card rarity colors</li>
+          <li data-i18n="newsUpdateCardOrder">Reordered card display</li>
+          <li data-i18n="newsUpdateRarity">Updated card rarity filtering</li>
         </ul>
 
       </div>
@@ -466,6 +469,13 @@
 
             <label class="sr-only" for="cardSearch" data-i18n="cardSearch">Search card names…</label>
             <input id="cardSearch" type="search" autocomplete="off" data-i18n-placeholder="cardSearch" placeholder="Search card names…" />
+
+            <div class="card-rarity-filters" id="cardRarityFilters" role="group" aria-label="Filter cards by rarity">
+              <button class="card-rarity-filter active" type="button" data-card-rarity="all" aria-pressed="true" data-i18n="allRarities">All rarities</button>
+              <button class="card-rarity-filter" type="button" data-card-rarity="epic" aria-pressed="false" data-i18n="epic">Epic</button>
+              <button class="card-rarity-filter" type="button" data-card-rarity="rare" aria-pressed="false" data-i18n="rare">Rare</button>
+              <button class="card-rarity-filter" type="button" data-card-rarity="refined" aria-pressed="false" data-i18n="refined">Refined</button>
+            </div>
 
             <div class="card-picker" id="cardPicker" role="group" aria-labelledby="cardSelectionLabel"></div>
 
