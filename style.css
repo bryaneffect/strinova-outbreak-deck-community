@@ -2462,3 +2462,494 @@ footer {
     font-size: 21px;
   }
 }
+
+/* =========================================================
+   MOBILE REFINEMENT (compact sizing) — keep at end of file
+   ========================================================= */
+
+@media (max-width: 640px) {
+
+  body {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .shell {
+    width: calc(100% - 24px);
+    margin-bottom: 40px;
+  }
+
+  /* ---------- TOPBAR ---------- */
+  .topbar {
+    min-height: 0;
+    padding: 8px 12px 0;
+    gap: 6px 10px;
+  }
+
+  .wordmark-logo {
+    width: 84px;
+  }
+
+  .topbar-auth .btn {
+    min-height: 34px;
+    padding: 6px 10px;
+    font-size: 10px;
+  }
+
+  .topbar-auth #topbarAuthLoggedOut,
+  .topbar-auth #topbarAuthLoggedIn {
+    gap: 6px;
+  }
+
+  .topbar-auth-email {
+    max-width: 90px;
+    font-size: 11px;
+  }
+
+  .donate-icon {
+    width: 34px;
+    height: 34px;
+    min-height: 0;
+  }
+
+  .donate-icon img {
+    width: 26px;
+    height: 26px;
+  }
+
+  .primary-nav {
+    gap: 16px;
+    scrollbar-width: none;
+  }
+
+  .primary-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .primary-nav a {
+    padding: 9px 0 7px;
+    font-size: 10px;
+    white-space: nowrap;
+  }
+
+  .primary-nav a::after {
+    bottom: 3px;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    min-height: 400px;
+    padding: 36px 16px 26px;
+  }
+
+  .terminal-tag {
+    gap: 8px;
+    margin-bottom: 12px;
+    font-size: 9px;
+    letter-spacing: .08em;
+    line-height: 1.4;
+  }
+
+  .terminal-tag::before {
+    flex: 0 0 18px;
+    width: 18px;
+  }
+
+  .hero h1 {
+    max-width: 100%;
+    margin-bottom: 10px;
+    font-size: 32px;
+    line-height: 1.02;
+  }
+
+  .hero-copy {
+    margin-bottom: 18px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .hero-actions {
+    gap: 8px;
+  }
+
+  .hero-actions .btn {
+    flex: 1 1 130px;
+  }
+
+  /* ---------- BUTTONS ---------- */
+  .btn {
+    min-height: 38px;
+    padding: 8px 14px;
+    font-size: 11px;
+  }
+
+  /* ---------- NEWS ---------- */
+  .news-update {
+    margin-top: 16px;
+  }
+
+  .news-update-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .news-update-image-main {
+    grid-column: 1 / -1;
+  }
+
+  .news-update-content {
+    padding: 14px 14px 12px;
+    gap: 6px;
+  }
+
+  .news-update-kicker {
+    font-size: 9px;
+  }
+
+  .news-update-heading h2 {
+    font-size: 18px;
+  }
+
+  .news-update-list li {
+    padding: 6px 0 6px 18px;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .news-update-list li::before {
+    top: 14px;
+    width: 7px;
+  }
+
+  /* ---------- PANELS / FORMS ---------- */
+  .panel {
+    margin-top: 18px;
+    padding: 16px 14px;
+  }
+
+  .panel-header {
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+  }
+
+  .panel-header h2 {
+    font-size: 16px;
+  }
+
+  .field-label,
+  .filter-label {
+    margin-bottom: 5px;
+    font-size: 10px;
+  }
+
+  /* 16px prevents iOS Safari from zooming in on focus */
+  input,
+  textarea,
+  select {
+    padding: 9px 10px;
+    font-size: 16px;
+  }
+
+  textarea {
+    min-height: 90px;
+  }
+
+  #description {
+    min-height: 110px;
+  }
+
+  .code-input {
+    height: 40px;
+    font-size: 14px;
+  }
+
+  .field {
+    margin-bottom: 12px;
+  }
+
+  .form-grid {
+    gap: 0;
+  }
+
+  .deck-name-code-group .field {
+    margin-bottom: 12px;
+  }
+
+  .filter-block {
+    margin-top: 12px;
+  }
+
+  .filters {
+    gap: 6px;
+  }
+
+  .filter {
+    padding: 6px 10px;
+    font-size: 10px;
+  }
+
+  .category-options {
+    gap: 6px;
+  }
+
+  .category-option {
+    min-height: 32px;
+    padding: 5px 9px;
+    font-size: 13px;
+  }
+
+  .field-hint {
+    font-size: 11px;
+  }
+
+  .form-actions {
+    gap: 8px;
+  }
+
+  .form-actions .btn {
+    flex: 1 1 140px;
+  }
+
+  /* ---------- DECK LIST ---------- */
+  .section-heading {
+    margin: 32px 0 12px;
+    gap: 8px;
+  }
+
+  .section-heading h2 {
+    font-size: 20px;
+  }
+
+  .record-count {
+    font-size: 10px;
+  }
+
+  .deck-grid {
+    gap: 12px;
+  }
+
+  .deck-card {
+    padding: 14px;
+  }
+
+  .deck-name {
+    margin: 4px 0 3px;
+    font-size: 17px;
+  }
+
+  .meta-line {
+    margin-bottom: 6px;
+    font-size: 10px;
+  }
+
+  .description {
+    min-height: 0;
+    margin-bottom: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .code-preview {
+    margin-bottom: 10px;
+    padding: 6px 8px;
+  }
+
+  .view-deck-btn {
+    margin-bottom: 10px;
+    padding: 7px 10px;
+    font-size: 10px;
+  }
+
+  .card-bottom {
+    padding-top: 8px;
+    font-size: 11px;
+  }
+
+  .copy-btn {
+    padding: 5px 10px;
+    font-size: 10px;
+  }
+
+  .card-actions {
+    margin-top: 8px;
+  }
+
+  .empty-state {
+    padding: 22px 16px;
+  }
+
+  /* ---------- CARD PICKER (upload form) ---------- */
+  .card-picker {
+    grid-template-columns: repeat(auto-fill, minmax(86px, 1fr));
+    gap: 6px;
+    max-height: 300px;
+    padding: 6px;
+  }
+
+  .card-option .card-title {
+    padding: 2px 3px;
+    font-size: 10px;
+  }
+
+  .card-option .card-rarity-panel {
+    min-height: 22px;
+    padding: 2px;
+    font-size: 8px;
+  }
+
+  .card-option input[type="checkbox"] {
+    top: 4px;
+    left: 4px;
+    width: 14px;
+    height: 14px;
+  }
+
+  .card-rarity-filters {
+    gap: 5px;
+  }
+
+  .card-rarity-filter {
+    min-height: 28px;
+    padding: 4px 9px;
+  }
+
+  /* ---------- DECK DETAILS MODAL ---------- */
+  .modal-overlay {
+    padding: 12px;
+  }
+
+  .modal {
+    padding: 16px;
+  }
+
+  .modal-header {
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+  }
+
+  .modal-header h2 {
+    font-size: 14px;
+  }
+
+  .modal-close {
+    width: 30px;
+    height: 30px;
+    flex: 0 0 auto;
+  }
+
+  .deck-details-modal {
+    max-height: 90vh;
+    padding: 14px;
+  }
+
+  .deck-details-heading {
+    gap: 10px;
+    padding-bottom: 10px;
+  }
+
+  .deck-details-heading h3 {
+    font-size: 17px;
+  }
+
+  .deck-detail-field {
+    padding: 10px 0;
+  }
+
+  .deck-detail-field p {
+    font-size: 13px;
+  }
+
+  .deck-details-cards {
+    grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+    gap: 6px;
+  }
+
+  .deck-details-card .card-title {
+    padding: 2px 3px;
+    font-size: 10px;
+  }
+
+  .deck-details-card .card-rarity-panel {
+    min-height: 22px;
+    font-size: 8px;
+  }
+
+  .deck-details-card .default-card-badge {
+    top: 22px;
+  }
+
+  /* ---------- AUTH / DONATE MODAL ---------- */
+  .auth-modal-logo {
+    width: min(100%, 150px);
+    margin-bottom: 12px;
+  }
+
+  .auth-instructions {
+    margin-bottom: 12px;
+    font-size: 11px;
+  }
+
+  .donate-image {
+    width: 76px;
+    height: 76px;
+    margin-bottom: 12px;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    gap: 10px;
+    margin-top: 32px;
+    padding: 16px 0;
+    font-size: 11px;
+  }
+
+  .footer-left,
+  .footer-right {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .footer-description {
+    padding-top: 10px;
+    font-size: 11px;
+    line-height: 1.5;
+  }
+}
+
+/* ---------- PHONE KECIL (≤ 380px) ---------- */
+@media (max-width: 380px) {
+
+  .hero {
+    min-height: 370px;
+    padding: 30px 14px 22px;
+  }
+
+  .hero h1 {
+    font-size: 28px;
+  }
+
+  .hero-copy {
+    font-size: 12.5px;
+  }
+
+  .wordmark-logo {
+    width: 76px;
+  }
+
+  .topbar-auth-email {
+    display: none;
+  }
+
+  .card-picker {
+    grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+  }
+
+  .deck-details-cards {
+    grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+  }
+
+  .news-update-heading h2 {
+    font-size: 16px;
+  }
+}
